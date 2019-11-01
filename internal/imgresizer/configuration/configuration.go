@@ -8,7 +8,8 @@ type Configuration struct {
 	Host string
 	Port int
 
-	EnableHTTPS     bool
-	EnableRateLimit bool
-	MaxConnections  int
+	EnableHTTPS        bool
+	EnableRateLimit    bool
+	EnableImageStorage bool
+	MaxConnections     int
 }

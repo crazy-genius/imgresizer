@@ -26,7 +26,6 @@ func NewServer(c configuration.Configuration) *Server {
 		router.Use(limitConnectionsMiddleWare(c.MaxConnections))
 	}
 
-	// router.Use(gin.Logger())
 	router.Use(gin.Recovery())
 	router.Use(versionMiddleWare(configuration.VERSION))
 	router.Use(requestIDMiddleWare())
