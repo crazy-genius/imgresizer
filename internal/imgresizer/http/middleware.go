@@ -1,6 +1,7 @@
 package http
 
 import (
+	_http "net/http"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -41,5 +42,24 @@ func limitConnectionsMiddleWare(maxConnections int) gin.HandlerFunc {
 		defer release(sem)
 
 		c.Next()
+	}
+}
+
+func checkHostMiddleware(allowedHosts []string) gin.HandlerFunc {
+
+	return func(c *gin.Context) {
+
+		for _, allowedHost := range allowedHosts {
+			if allowedHost == "*" {
+				c.Next()
+				return
+			}
+			if c.Request.URL.Hostname() == allowedHost {
+				c.Next()
+				return
+			}
+		}
+
+		c.AbortWithStatus(_http.StatusUnauthorized)
 	}
 }

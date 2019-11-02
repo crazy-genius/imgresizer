@@ -23,6 +23,7 @@ func main() {
 		EnableImageStorage: false,
 		EnableRateLimit:    true,
 		MaxConnections:     10,
+		AllowedHosts:       []string{"*"},
 	})
 
 	srv.StartAndListenSignals()

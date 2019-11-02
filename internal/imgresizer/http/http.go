@@ -29,6 +29,7 @@ func NewServer(c configuration.Configuration) *Server {
 	router.Use(gin.Recovery())
 	router.Use(versionMiddleWare(configuration.VERSION))
 	router.Use(requestIDMiddleWare())
+	router.Use(checkHostMiddleware(c.AllowedHosts))
 
 	router.GET("/", hello)
 	router.GET("/resize", resize)

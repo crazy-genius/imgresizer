@@ -12,4 +12,6 @@ type Configuration struct {
 	EnableRateLimit    bool
 	EnableImageStorage bool
 	MaxConnections     int
+
+	AllowedHosts []string
 }
