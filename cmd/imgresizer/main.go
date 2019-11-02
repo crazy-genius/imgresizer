@@ -2,29 +2,37 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"os"
+	"strings"
 
 	"github.com/crazy-genius/imgresizer/internal/imgresizer/configuration"
 	"github.com/crazy-genius/imgresizer/internal/imgresizer/http"
 )
 
-// func check(e error) {
-// 	if e != nil {
-// 		panic(e)
-// 	}
-// }
+func check(e error) {
+	if e != nil {
+		panic(e)
+	}
+}
 
 func main() {
 	fmt.Println("Hello to resizer!")
 
-	srv := http.NewServer(configuration.Configuration{
-		Host:               "localhost",
-		Port:               8080,
-		EnableHTTPS:        false,
-		EnableImageStorage: false,
-		EnableRateLimit:    true,
-		MaxConnections:     10,
-		AllowedHosts:       []string{"*"},
-	})
+	if len(os.Args) < 2 {
+		log.Fatal("No configuration file provided")
+	}
+
+	cfgArgument := os.Args[1]
+	if !strings.Contains(cfgArgument, "-c=") {
+		log.Fatal("No configuration file provided")
+	}
+	cfgArgument = strings.ReplaceAll(cfgArgument, "-c=", "")
+
+	cfg, err := configuration.LoadConfiguration(cfgArgument)
+	check(err)
+
+	srv := http.NewServer(*cfg)
 
 	srv.StartAndListenSignals()
 }

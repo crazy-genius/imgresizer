@@ -25,8 +25,10 @@ lint:
 
 build: fmt lint clean create_folders 
 	go build -o bin/imgresizer ./cmd/imgresizer/main.go
+	cp config.yaml bin/config.yaml
 
 install_critic:
 	go get github.com/go-lintpack/lintpack/...
 	go get github.com/go-critic/go-critic/...
 	lintpack build -o $(GOPATH)/bin/gocritic -linter.version='v0.3.4' -linter.name='gocritic' github.com/go-critic/go-critic/checkers
+
