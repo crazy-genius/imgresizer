@@ -1,0 +1,9 @@
+
+host: localhost
+port: 3005
+enabelHttps: false
+enableRateLimits: true
+maxConnections: 10
+allowedHosts:
+  - "*"
+enableImageStorage: false
