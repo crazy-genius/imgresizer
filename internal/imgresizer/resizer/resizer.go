@@ -6,7 +6,7 @@ import (
 
 // Resizer provide functionality to resizer image
 type Resizer interface {
-	Resize(reader io.Reader, rc ResizeConfig) ([]byte, error)
+	Resize(reader io.Reader, out io.Writer, rc ResizeConfig) error
 }
 
 // ResizeConfig represents a desired img resize configuration

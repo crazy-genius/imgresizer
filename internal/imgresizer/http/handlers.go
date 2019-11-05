@@ -1,6 +1,7 @@
 package http
 
 import (
+	"io"
 	"io/ioutil"
 	_http "net/http"
 	"time"
@@ -66,25 +67,29 @@ func resize(c *gin.Context) {
 			return
 		}
 
-		data, err := rs.Resize(ioutil.NopCloser(resp.Body), resizer.ResizeConfig{
-			Dimenstions: resizer.Dimenstions{
-				Height: queryModel.Height,
-				Width:  queryModel.Width,
-			},
-			Quality: 90,
+		c.Request.Header.Set("Content-Type", "image/jpg")
+
+		c.Stream(func(w io.Writer) bool {
+			err := rs.Resize(ioutil.NopCloser(resp.Body), c.Writer, resizer.ResizeConfig{
+				Dimenstions: resizer.Dimenstions{
+					Height: queryModel.Height,
+					Width:  queryModel.Width,
+				},
+				Quality: 90,
+			})
+
+			if err != nil {
+				reportError(c, err)
+				return true
+			}
+
+			if err := resp.Body.Close(); err != nil {
+				reportError(c, err)
+				return true
+			}
+
+			return false
 		})
-
-		if err != nil {
-			reportError(c, err)
-			return
-		}
-
-		if err := resp.Body.Close(); err != nil {
-			reportError(c, err)
-			return
-		}
-
-		c.Data(_http.StatusOK, "image/jpeg", data)
 	} else {
 		c.String(_http.StatusBadRequest, queryModel.getError())
 	}
