@@ -15,6 +15,6 @@ func NewCacheResizer(r Resizer) *CacheResizer {
 }
 
 // Resize resize imge
-func (c CacheResizer) Resize(reader io.Reader, rc ResizeConfig) ([]byte, error) {
-	return c.wrappedResizer.Resize(reader, rc)
+func (c CacheResizer) Resize(reader io.Reader, writer io.Writer, rc ResizeConfig) error {
+	return c.wrappedResizer.Resize(reader, writer, rc)
 }
